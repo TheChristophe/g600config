@@ -1,24 +1,12 @@
 
-#include <fcntl.h>
-#include <iconv.h>
-#include <pty.h>
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stropts.h>
-#include <sys/select.h>
-#include <sys/time.h>
-#include <sys/types.h>
-#include <unistd.h>
+#include <cstdio>
+#include <cstdlib>
 
-#define __KERNEL__
 #include <libusb-1.0/libusb.h>
-
-//#define DEBUG
 
 #define VENDOR_LOGITECH 0x046d
 #define TIMEOUT 0x1000
+
 #define failif(condition)                                                              \
 	do {                                                                               \
 		if (condition) {                                                               \
