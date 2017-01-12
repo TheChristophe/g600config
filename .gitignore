@@ -1,3 +1,5 @@
+/lib/libusb-1.0.21/
 /g600tool
+/g600tool.exe
 *.o
 *.d

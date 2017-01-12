@@ -3,6 +3,7 @@
 
 #include <cstdint>
 
+// These are equivalent to &GData.thing - &GData
 struct Offsets {
 	enum {
 		ProfileID          = 0x0000,
@@ -25,13 +26,16 @@ struct Offsets {
 
 struct G600Data {
 	// List of keys:
-	// 1, 2, 3 - Mouse 1, 2, 3
+	// 1, 2, 3 - Mouse Left, Right, Middle
 	// 4, 5 - Scroll Left, Right
-	// 6 - G-Switch
-	// 7:20 - G7:G20
+	// 6 - G-Switch (extra key on the right)
+	// 7:20 - G7:G20 (labelled on mouse)
 
 	uint8_t m_profileID; // f3, f4 or f5
-	uint8_t m_red;       // 0x00 - 0x63
+
+	// I do not yet know the difference between this and the second color set
+	// below
+	uint8_t m_red; // 0x00 - 0x63
 	uint8_t m_green;
 	uint8_t m_blue;
 
@@ -43,7 +47,8 @@ struct G600Data {
 	uint8_t m_pollingRate;        // 0 1000Hz - 7 125Hz
 	uint8_t m_switchSensitivity;  // equal to a value of m_sensivities
 	uint8_t m_defaultSensitivity; // 0x1-0x4
-	uint8_t m_sensitivities[4];   // multiples of 50, minimum in Logitech's tool is 0x4
+	uint8_t m_sensitivities[4];   // multiples of 50, minimum in Logitech's tool
+	                              // is 0x4
 
 	uint8_t m_unknown3[13];
 
@@ -62,6 +67,6 @@ struct G600Data {
 		uint8_t m_modifier;
 		uint8_t m_keyboardKey;
 	} m_altKeys[20];
-} __attribute__((packed)); // total size 154, hope the packed works
+} __attribute__((packed)); // total size 154, assuming the packed works
 
 #endif
