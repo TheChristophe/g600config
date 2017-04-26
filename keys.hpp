@@ -24,13 +24,14 @@ struct Key {
 	struct Keyboard {
 		enum {
 			// Modifiers as understood by the G600
-			Control = 0x01,
-			Shift   = 0x02,
-			Alt     = 0x04,
-			Windows = 0x08,
-			RCtrl   = 0x10,
-			RShift  = 0x20,
-			AltGr   = 0x40,
+			Control      = 0x01,
+			Shift        = 0x02,
+			Alt          = 0x04,
+			Windows      = 0x08,
+			RCtrl        = 0x10,
+			RShift       = 0x20,
+			AltGr        = 0x40,
+			RightWindows = 0x80,
 
 			// Reference:
 			// "Universal Serial Bus (SUB)""
@@ -143,7 +144,7 @@ struct Key {
 			NumEight          = 0x60, // and up
 			NumNine           = 0x61, // and page up
 			NumZero           = 0x62, // and insert
-			NumDecimal        = 0x63, // and delete
+			NumDecimalSymbol  = 0x63, // and delete // should be NumDecimal but collision
 			NonUSBackslash    = 0x64, // and '|'
 			Application       = 0x65,
 			Power             = 0x66,
