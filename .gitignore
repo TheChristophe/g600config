@@ -3,3 +3,5 @@
 /g600tool.exe
 *.o
 *.d
+ui.cpp
+ui.h
