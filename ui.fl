@@ -66,7 +66,7 @@ Update();}
         Fl_Slider pollRate {
           label 1000Hz
           callback {static const char freqs[8][8] = {
-    "1000Hz", "500Hz", "250Hz", "125Hz", "1000Hz", "500Hz", "250Hz", "125Hz"
+    "1000Hz", "500Hz", "333Hz", "250Hz", "200Hz", "166Hz", "133Hz", "100Hz"
 };
 pollRate->label(freqs[(int)pollRate->value()]);
 mouseData[profilePicker->value()].m_effectSpeed = pollRate->value();
@@ -131,7 +131,7 @@ effectPicker->value(mouseData[profile].m_effect);
 effectSpeed->value(mouseData[profile].m_effectSpeed);
 
 static const char freqs[8][8] = {
-    "1000Hz", "500Hz", "250Hz", "125Hz", "1000Hz", "500Hz", "250Hz", "125Hz"
+    "1000Hz", "500Hz", "333Hz", "250Hz", "200Hz", "166Hz", "133Hz", "100Hz"
 };
 pollRate->value(mouseData[profile].m_pollingRate);
 pollRate->label(freqs[mouseData[profile].m_pollingRate]);} {selected
