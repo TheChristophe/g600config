@@ -89,8 +89,8 @@ enum {
 	KnownMouseModels = sizeof(mouseModels) / sizeof(MouseModel),
 
 	// RT bmRequestType, R bRequest
-	GetDataRT = LIBUSB_ENDPOINT_IN | LIBUSB_REQUEST_TYPE_CLASS | LIBUSB_RECIPIENT_INTERFACE, // 0xa1
-	GetDataR  = LIBUSB_REQUEST_CLEAR_FEATURE,                                                // I would really like to ask the Logitech devs why this random ass request and not GET_CONFIGURATION
+	GetDataRT = LIBUSB_ENDPOINT_IN | LIBUSB_REQUEST_TYPE_CLASS | LIBUSB_RECIPIENT_INTERFACE,
+	GetDataR  = LIBUSB_REQUEST_CLEAR_FEATURE, // I would really like to ask the Logitech devs why this random ass request and not GET_CONFIGURATION
 
 	SetDataRT = LIBUSB_ENDPOINT_OUT | LIBUSB_REQUEST_TYPE_CLASS | LIBUSB_RECIPIENT_INTERFACE,
 	SetDataR  = LIBUSB_REQUEST_SET_CONFIGURATION,

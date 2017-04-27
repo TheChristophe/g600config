@@ -7,7 +7,7 @@ LDFLAGS=-Llib/libusb-1.0.21 -lusb-1.0 -lfltk
 SRC=$(wildcard *.cpp)
 HEADERS=$(wildcard *.hpp)
 
-g600tool: $(HEADERS) $(SRC)
+g600tool: $(HEADERS) $(SRC) ui.hpp
 	@echo "Building program"
 	@$(CXX) $(CXXFLAGS) $(SRC) -o g600tool $(LDFLAGS)
 

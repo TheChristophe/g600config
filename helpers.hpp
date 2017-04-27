@@ -9,7 +9,7 @@
 #define Try(call)                                                                                                                                    \
 	do {                                                                                                                                             \
 		result = call;                                                                                                                               \
-		if (result != 0) {                                                                                                                           \
+		if (result < 0) {                                                                                                                            \
 			std::cout << __FILE__ << ":" << __LINE__ << " " << STR(call) << ": " << result << " (" << libusb_error_name(result) << ")" << std::endl; \
 		}                                                                                                                                            \
 	} while (0)

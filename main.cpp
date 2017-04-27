@@ -51,6 +51,8 @@ int main(int argc, char **argv)
 		break;
 	}
 
+	Fl::scheme("gtk+");
+
 	if (deviceFound == -1) {
 		fl_alert("No compatible mouse found, attach one and try again!");
 	}

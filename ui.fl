@@ -10,54 +10,107 @@ class UserInterface {
   } {
     Fl_Window mainWindow {
       label {UI Tool} open
-      xywh {63 678 260 155} type Single box UP_BOX align 80
+      xywh {1158 37 755 495} type Single align 80
       code0 {\#include "usbCommands.hpp"}
       code1 {\#include "usbHelpers.hpp"} visible
     } {
       Fl_Group {} {
         label Colors open
-        xywh {10 55 235 90} box THIN_UP_BOX
+        xywh {10 60 235 90} box THIN_DOWN_BOX
       } {
         Fl_Value_Slider redSlider {user_data_type {void *}
-          callback {int profileID = atoi(profilePicker->value()) - 1;
-mouseData[profileID].m_red = redSlider->value();
-mouseData[profileID].m_red2 = redSlider->value();
+          callback {mouseData[profilePicker->value()].m_red = redSlider->value();
+mouseData[profilePicker->value()].m_red2 = redSlider->value();
 
-SetConfig(&mouseInfo, profileID, mouseData[profileID]);}
-          xywh {20 65 215 20} type Horizontal when 4 maximum 255 step 1 value 127
+Update();}
+          xywh {20 70 215 20} type Horizontal when 4 maximum 255 step 1 value 127
         }
         Fl_Value_Slider greenSlider {
-          callback {int profileID = atoi(profilePicker->value()) - 1;
-mouseData[profileID].m_green = greenSlider->value();
-mouseData[profileID].m_green2 = greenSlider->value();
+          callback {mouseData[profilePicker->value()].m_green = greenSlider->value();
+mouseData[profilePicker->value()].m_green2 = greenSlider->value();
 
-SetConfig(&mouseInfo, profileID, mouseData[profileID]);}
-          xywh {20 90 215 20} type Horizontal when 4 maximum 255 step 1 value 127
+Update();}
+          xywh {20 95 215 20} type Horizontal when 4 maximum 255 step 1 value 127
         }
         Fl_Value_Slider blueSlider {
-          callback {int profileID = atoi(profilePicker->value()) - 1;
-mouseData[profileID].m_blue = blueSlider->value();
-mouseData[profileID].m_blue2 = blueSlider->value();
+          callback {mouseData[profilePicker->value()].m_blue = blueSlider->value();
+mouseData[profilePicker->value()].m_blue2 = blueSlider->value();
 
-SetConfig(&mouseInfo, profileID, mouseData[profileID]);}
-          xywh {20 115 215 20} type Horizontal when 4 maximum 255 step 1 value 127
+Update();}
+          xywh {20 120 215 20} type Horizontal when 4 maximum 255 step 1 value 127
         }
       }
-      Fl_Input_Choice profilePicker {
+      Fl_Choice profilePicker {
         label Profile
-        comment {The profile to edit} open
-        xywh {60 10 130 25}
+        callback {ReloadData(profilePicker->value());} open
+        xywh {60 10 185 25} box DOWN_BOX down_box BORDER_BOX
+      } {}
+      Fl_Group {} {
+        label Miscellaneous open
+        xywh {10 175 235 135} box THIN_DOWN_BOX
+      } {
+        Fl_Choice effectPicker {
+          label Effect
+          callback {mouseData[profilePicker->value()].m_effect = effectPicker->value();
+
+Update();} open
+          xywh {65 185 165 25} down_box BORDER_BOX
+        } {}
+        Fl_Slider effectSpeed {
+          label Speed
+          callback {mouseData[profilePicker->value()].m_effectSpeed = effectSpeed->value();
+
+Update();}
+          xywh {20 220 210 20} type {Horz Knob} when 4 maximum 15 step 1
+        }
+        Fl_Slider pollRate {
+          label 1000Hz
+          callback {static const char freqs[8][8] = {
+    "1000Hz", "500Hz", "250Hz", "125Hz", "1000Hz", "500Hz", "250Hz", "125Hz"
+};
+pollRate->label(freqs[(int)pollRate->value()]);
+mouseData[profilePicker->value()].m_effectSpeed = pollRate->value();
+
+Update();}
+          xywh {20 265 210 20} type {Horz Knob} maximum 7 step 1
+        }
+      }
+      Fl_Group {} {
+        label Sensivities open selected
+        xywh {10 335 235 145} box THIN_DOWN_BOX
+      } {
+        Fl_Output todoSens {
+          xywh {20 345 215 30} deactivate
+        }
+      }
+      Fl_Group {} {
+        label Keybinds open
+        xywh {255 60 490 210} box THIN_DOWN_BOX
       } {}
     }
-    code {mouseInfo = info;
+    code {// Get mouse info
+mouseInfo = info;
 GetConfig(&mouseInfo, 0, mouseData[0]);
 GetConfig(&mouseInfo, 1, mouseData[1]);
 GetConfig(&mouseInfo, 2, mouseData[2]);} {}
-    code {profilePicker->clear();
-profilePicker->add("1");
-profilePicker->add("2");
-profilePicker->add("3");
-profilePicker->value("1");} {}
+    code {// Set up options
+profilePicker->clear();
+profilePicker->add("1", 0, 0);
+profilePicker->add("2", 0, 0);
+profilePicker->add("3", 0, 0);
+profilePicker->value(0);
+
+effectPicker->clear();
+effectPicker->add("None", 0, 0);
+effectPicker->add("Pulsating", 0, 0);
+effectPicker->add("Rainbow", 0, 0);
+effectPicker->value(0);
+
+pollRate->value(0);
+pollRate->label("1000Hz");
+
+todoSens->value("TODO: sensitivities");} {}
+    code {ReloadData(0);} {}
     code {mainWindow->show();} {}
   }
   decl {MouseInfo mouseInfo;} {
@@ -65,5 +118,27 @@ profilePicker->value("1");} {}
   }
   decl {G600Data mouseData[3];} {
     comment {The mouse configuration} private local
+  }
+  Function {ReloadData(int profile)} {
+    comment {Load data from mouse data into into UI} open
+  } {
+    code {// Load mouse value into etc
+redSlider->value(mouseData[profile].m_red);
+greenSlider->value(mouseData[profile].m_green);
+blueSlider->value(mouseData[profile].m_blue);
+
+effectPicker->value(mouseData[profile].m_effect);
+effectSpeed->value(mouseData[profile].m_effectSpeed);
+
+static const char freqs[8][8] = {
+    "1000Hz", "500Hz", "250Hz", "125Hz", "1000Hz", "500Hz", "250Hz", "125Hz"
+};
+pollRate->value(mouseData[profile].m_pollingRate);
+pollRate->label(freqs[profile]);} {}
+  }
+  Function {Update()} {
+    comment {Update mouse config} open
+  } {
+    code {SetConfig(&mouseInfo, profilePicker->value(), mouseData[profilePicker->value()]);} {}
   }
 }
