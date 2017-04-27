@@ -5,6 +5,7 @@
 
 #include <FL/fl_ask.H>
 
+#include <iomanip>
 #include <iostream>
 #include <string>
 
@@ -19,6 +20,7 @@ int main(int argc, char **argv)
 	int numDevices = result;
 
 	int deviceFound       = -1;
+	int deviceModelID     = -1;
 	libusb_device *device = nullptr;
 
 	for (int i = 0; i < numDevices; i++) {
@@ -33,7 +35,8 @@ int main(int argc, char **argv)
 		MouseModel *model = nullptr;
 		for (int j = 0; j < KnownMouseModels; j++) {
 			if (descriptor.idProduct == mouseModels[j].m_id) {
-				model = &mouseModels[j];
+				model         = &mouseModels[j];
+				deviceModelID = j;
 				break;
 			}
 		}
@@ -42,9 +45,10 @@ int main(int argc, char **argv)
 			continue;
 		}
 
-		std::cout << "Device " << descriptor.idVendor << ":" << descriptor.idProduct << " " << model->m_name << " found" << std::endl;
+		std::cout << "Device " << device << std::hex << std::setw(4) << descriptor.idVendor << ":" << std::setw(4) << descriptor.idProduct << " " << std::dec << model->m_name << " found" << std::endl;
 
 		deviceFound = i;
+		break;
 	}
 
 	if (deviceFound == -1) {
@@ -52,8 +56,9 @@ int main(int argc, char **argv)
 	}
 	else {
 		MouseInfo mouseInfo;
-		mouseInfo.m_model  = &mouseModels[deviceFound];
-		mouseInfo.m_device = device;
+		mouseInfo.m_model  = &mouseModels[deviceModelID];
+		mouseInfo.m_device = list[deviceFound];
+
 		UserInterface ui(mouseInfo);
 		// It does the rest by itself :D
 	}

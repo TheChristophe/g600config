@@ -2,8 +2,21 @@
 
 #include "usbCommands.hpp"
 
+void SetConfig(void *info, int profileID, const G600Data &data)
+{
+	MouseInfo *mouseInfo = (MouseInfo *)info;
+	ApplyData(mouseInfo->m_model, mouseInfo->m_device, data, profileID);
+}
+
+void GetConfig(void *info, int profileID, G600Data &data)
+{
+	MouseInfo *mouseInfo = (MouseInfo *)info;
+	ReadData(mouseInfo->m_model, mouseInfo->m_device, data, profileID);
+}
+
 namespace Set {
-	void Colors(void *info, int red, int green, int blue)
+
+	void Colors(void *info, int profileID, int red, int green, int blue)
 	{
 		MouseInfo *mouseInfo = (MouseInfo *)info;
 
@@ -15,6 +28,6 @@ namespace Set {
 		delta.emplace_back(Offsets::Blue, blue);
 		delta.emplace_back(Offsets::Blue2, blue);
 
-		ApplyDelta(mouseInfo->m_model, mouseInfo->m_device, delta, 0);
+		ApplyDelta(mouseInfo->m_model, mouseInfo->m_device, delta, profileID);
 	}
 };

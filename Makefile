@@ -1,7 +1,7 @@
 all: default
 default: g600tool
 
-CXXFLAGS=-g -std=c++11 -DWIN32
+CXXFLAGS=-g -std=c++11
 LDFLAGS=-Llib/libusb-1.0.21 -lusb-1.0 -lfltk
 
 SRC=$(wildcard *.cpp)

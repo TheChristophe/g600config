@@ -3,6 +3,7 @@
 
 #include <libusb-1.0/libusb.h>
 
+#include <cstddef>
 #include <cstdint>
 #include <vector>
 
@@ -60,7 +61,7 @@ struct MouseModel {
 
 struct MouseInfo {
 	MouseModel *m_model;
-	libusb_device *m_device;
+	struct libusb_device *m_device;
 };
 
 struct Delta {
@@ -83,15 +84,15 @@ extern MouseModel mouseModels[1];
 
 enum {
 	VendorLogitech   = 0x046d,
-	ConfigSize       = 154,    // wLength1
+	ConfigSize       = 154,    // wLength
 	Timeout          = 0x1000, // timeout
 	KnownMouseModels = sizeof(mouseModels) / sizeof(MouseModel),
 
 	// RT bmRequestType, R bRequest
 	GetDataRT = LIBUSB_ENDPOINT_IN | LIBUSB_REQUEST_TYPE_CLASS | LIBUSB_RECIPIENT_INTERFACE, // 0xa1
-	GetDataR  = LIBUSB_REQUEST_GET_CONFIGURATION,
+	GetDataR  = LIBUSB_REQUEST_CLEAR_FEATURE,                                                // I would really like to ask the Logitech devs why this random ass request and not GET_CONFIGURATION
 
-	SetDataRT = LIBUSB_ENDPOINT_OUT | LIBUSB_REQUEST_TYPE_CLASS | LIBUSB_RECIPIENT_INTERFACE, // 0x21
+	SetDataRT = LIBUSB_ENDPOINT_OUT | LIBUSB_REQUEST_TYPE_CLASS | LIBUSB_RECIPIENT_INTERFACE,
 	SetDataR  = LIBUSB_REQUEST_SET_CONFIGURATION,
 };
 
@@ -117,6 +118,9 @@ namespace Offsets {
 
 // Functions
 
-int ApplyDelta(MouseModel *mouse, libusb_device *device, const std::vector<Delta> &delta, int mouseID);
+int ApplyDelta(MouseModel *mouse, struct libusb_device *device, const std::vector<Delta> &delta, int profileID);
+int ApplyData(MouseModel *mouse, struct libusb_device *device, const G600Data &data, int profileID);
+
+int ReadData(MouseModel *mouse, struct libusb_device *device, G600Data &destination, int profileID);
 
 #endif

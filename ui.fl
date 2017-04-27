@@ -1,6 +1,6 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0303 
-header_name {.hpp} 
+version 1.0304
+header_name {.hpp}
 code_name {.cpp}
 class UserInterface {
   comment {Main UI class} open
@@ -10,35 +10,60 @@ class UserInterface {
   } {
     Fl_Window mainWindow {
       label {UI Tool} open
-      xywh {311 161 258 181} type Single box UP_BOX align 80
+      xywh {63 678 260 155} type Single box UP_BOX align 80
       code0 {\#include "usbCommands.hpp"}
       code1 {\#include "usbHelpers.hpp"} visible
     } {
       Fl_Group {} {
         label Colors open
-        xywh {10 20 240 150} box THIN_UP_BOX
+        xywh {10 55 235 90} box THIN_UP_BOX
       } {
         Fl_Value_Slider redSlider {user_data_type {void *}
-          xywh {20 30 215 20} type Horizontal maximum 255 step 1 value 127
+          callback {int profileID = atoi(profilePicker->value()) - 1;
+mouseData[profileID].m_red = redSlider->value();
+mouseData[profileID].m_red2 = redSlider->value();
+
+SetConfig(&mouseInfo, profileID, mouseData[profileID]);}
+          xywh {20 65 215 20} type Horizontal when 4 maximum 255 step 1 value 127
         }
         Fl_Value_Slider greenSlider {
-          xywh {20 55 215 20} type Horizontal maximum 255 step 1 value 127
+          callback {int profileID = atoi(profilePicker->value()) - 1;
+mouseData[profileID].m_green = greenSlider->value();
+mouseData[profileID].m_green2 = greenSlider->value();
+
+SetConfig(&mouseInfo, profileID, mouseData[profileID]);}
+          xywh {20 90 215 20} type Horizontal when 4 maximum 255 step 1 value 127
         }
         Fl_Value_Slider blueSlider {
-          xywh {20 80 215 20} type Horizontal maximum 255 step 1 value 127
-        }
-        Fl_Button applyButton {
-          label Apply
-          user_data this
-          callback {Set::Colors(&mouseInfo, redSlider->value(), greenSlider->value(), blueSlider->value());}
-          xywh {45 135 170 25}
+          callback {int profileID = atoi(profilePicker->value()) - 1;
+mouseData[profileID].m_blue = blueSlider->value();
+mouseData[profileID].m_blue2 = blueSlider->value();
+
+SetConfig(&mouseInfo, profileID, mouseData[profileID]);}
+          xywh {20 115 215 20} type Horizontal when 4 maximum 255 step 1 value 127
         }
       }
+      Fl_Input_Choice profilePicker {
+        label Profile
+        comment {The profile to edit} open
+        xywh {60 10 130 25}
+      } {}
     }
-    code {mouseInfo = info;} {}
+    code {mouseInfo = info;
+GetConfig(&mouseInfo, 0, mouseData[0]);
+GetConfig(&mouseInfo, 1, mouseData[1]);
+GetConfig(&mouseInfo, 2, mouseData[2]);} {}
+    code {profilePicker->clear();
+profilePicker->add("1");
+profilePicker->add("2");
+profilePicker->add("3");
+profilePicker->value("1");} {}
     code {mainWindow->show();} {}
   }
   decl {MouseInfo mouseInfo;} {
     comment {Metadata about the mouse we configure} private local
   }
-} 
+  decl {G600Data mouseData[3];} {
+    comment {The mouse configuration} private local
+  }
+}
