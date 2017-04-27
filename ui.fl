@@ -76,7 +76,7 @@ Update();}
         }
       }
       Fl_Group {} {
-        label Sensivities open selected
+        label Sensivities open
         xywh {10 335 235 145} box THIN_DOWN_BOX
       } {
         Fl_Output todoSens {
@@ -134,7 +134,8 @@ static const char freqs[8][8] = {
     "1000Hz", "500Hz", "250Hz", "125Hz", "1000Hz", "500Hz", "250Hz", "125Hz"
 };
 pollRate->value(mouseData[profile].m_pollingRate);
-pollRate->label(freqs[profile]);} {}
+pollRate->label(freqs[mouseData[profile].m_pollingRate]);} {selected
+    }
   }
   Function {Update()} {
     comment {Update mouse config} open
